@@ -79,7 +79,7 @@ def flatten_dict(input_dict):
 	# Reduced size
 	output.append(['num','prov','poly_num','X','Y','Path'])
 
-	import pprint
+	# import pprint
 	#pprint.pprint(input_dict)
 
 	for entry in input_dict:
@@ -113,6 +113,7 @@ if __name__=='__main__':
 	folder =os.path.dirname(os.path.realpath(__file__))+r'\\data\\'
 	gml_file=folder+'FED_CA_2_2_ENG.gml'
 
+	# Convert GML to Polygon dictionary
 	parsed = parse_gml(gml_file)
 
 	# Explicitly encode to STR to avoid issues with French letters
