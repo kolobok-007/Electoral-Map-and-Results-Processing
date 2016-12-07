@@ -27,6 +27,7 @@ def table_to_dict(table):
 	polygon=[]
 	cur_num=None
 	cur_poly='1'
+	cur_prov=''
 	row_num=0
 
 	for row in table:
@@ -40,6 +41,7 @@ def table_to_dict(table):
 		if row_num==0:
 			polygon.append([float(x),float(y)])
 			cur_num=num
+			cur_prov=prov
 		elif num==cur_num and poly_num==cur_poly:
 			polygon.append([float(x),float(y)])
 		elif num==cur_num and poly_num!=cur_poly:
@@ -50,10 +52,11 @@ def table_to_dict(table):
 		elif num!=cur_num:
 			# print 'worked'
 			dict_row.append(polygon)
-			output[cur_num]={'prov':prov, 
+			output[cur_num]={'prov':cur_prov, 
 							 'polygons':dict_row}
 			cur_num=num
 			cur_poly=poly_num
+			cur_prov=prov
 			polygon=[]
 			dict_row=[]
 			polygon.append([float(x),float(y)])
