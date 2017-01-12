@@ -3,7 +3,7 @@
 @author: mvenkov
 """
 def parse_coordinates(input_string, poly_num):
-	# Parses a string of coordinates into a list of float corrdinates
+	""" Parses a string of coordinates into a list of float corrdinates"""
 	array = input_string.split(' ')
 	final = []
 	for a in array:
@@ -12,7 +12,7 @@ def parse_coordinates(input_string, poly_num):
 	return final
 
 def parse_gml(gml_file):
-	# Extracts data out of GML file and outputs a dictionary
+	"""Extracts data out of GML file and outputs a dictionary"""
 	print 'Parsing GML file...'
 	import xml.etree.ElementTree as ET
 	import codecs
@@ -64,7 +64,7 @@ def parse_gml(gml_file):
 	return out_dict
 
 def flatten_dict(input_dict):
-	# Converts dictionary into a list that can be saved a CSV file
+	"""Converts dictionary into a list that can be saved to a CSV file"""
 	print 'Flattening dictionary...'
 	num = None
 	name = None
@@ -73,14 +73,8 @@ def flatten_dict(input_dict):
 	coor = []
 	output = []
 	row=1
-	# Full description
-	# output.append(['num','name','prov','poly_num','X','Y','Path'])
 
-	# Reduced size
 	output.append(['num','prov','poly_num','X','Y','Path'])
-
-	# import pprint
-	#pprint.pprint(input_dict)
 
 	for entry in input_dict:
 		num = entry
@@ -88,15 +82,13 @@ def flatten_dict(input_dict):
 		coor = input_dict[entry]['coor']
 
 		for X, Y, poly_num in coor:
-			# output.append([num, name, prov,poly_num, X, Y, row])
-			# Reduced size:
 			output.append([num,prov, poly_num, X, Y, row])
 			row+=1
 	print 'Finished flattening'
 	return output
 
 def to_str(table):
-	# encodes a table into a str file
+	"""encodes a table into a str file"""
 	name=None
 	output=[]
 	for row in table:

@@ -6,6 +6,9 @@ Processes GML map data and converts to a polygon CSV that can be used by visuali
 Process_Election_Results.py:
 Processes and summarizes election results
 
+Polygon_Generalizer.py:
+Simplifies polygon map shapes to reduce size and improve performance at minimal detail loss
+
 Visualization can be viewed here:
 https://public.tableau.com/views/CanadaFederalElectionResults2015/ResultsperParty?:embed=y&:display_count=yes
 

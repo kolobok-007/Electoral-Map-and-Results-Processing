@@ -6,6 +6,7 @@ from shapely import geometry as geo
 import csv
 
 def load_shapefile(filename):
+	"""Loads csv shapefile"""
 	with open(filename, 'rb') as csvfile:
 		reader=csv.reader(csvfile)
 		row_num=0
@@ -21,6 +22,7 @@ def load_shapefile(filename):
 		return column_names,data
 
 def table_to_dict(table):
+	"""converts table (list of lists) into a dictionary"""
 	output={}
 	num_set=set()
 	dict_row=[]
@@ -39,18 +41,21 @@ def table_to_dict(table):
 		path=row[5]
 
 		if row_num==0:
+			# First row
 			polygon.append([float(x),float(y)])
 			cur_num=num
 			cur_prov=prov
 		elif num==cur_num and poly_num==cur_poly:
+			# Regular data point: same district and same polygon
 			polygon.append([float(x),float(y)])
 		elif num==cur_num and poly_num!=cur_poly:
+			# Same district, new polygon
 			dict_row.append(polygon)
 			cur_poly=poly_num
 			polygon=[]
 			polygon.append([float(x),float(y)])
 		elif num!=cur_num:
-			# print 'worked'
+			# New district
 			dict_row.append(polygon)
 			output[cur_num]={'prov':cur_prov, 
 							 'polygons':dict_row}
@@ -71,6 +76,7 @@ def table_to_dict(table):
 	return output
 
 def plot_polygon(polygon):
+	"""Helper function to plot polygons"""
 	import matplotlib.pyplot as plt
 	print 'Number of coordiantes: ', len(polygon)
 	xs = [x[0] for x in polygon]
@@ -79,7 +85,7 @@ def plot_polygon(polygon):
 	plt.show()
 
 def flatten_dict_and_simplify(input_dict):
-	# Converts dictionary into a list that can be saved a CSV file
+	""" Converts dictionary into a list that can be saved a CSV file"""
 	print 'Flattening dictionary...'
 	num = None
 	name = None
@@ -88,14 +94,9 @@ def flatten_dict_and_simplify(input_dict):
 	coor = []
 	output = []
 	row=1
-	# Full description
-	# output.append(['num','name','prov','poly_num','X','Y','Path'])
 
 	# Reduced size
 	output.append(['num','prov','poly_num','X','Y','Path'])
-
-	# import pprint
-	#pprint.pprint(input_dict)
 
 	for entry in input_dict:
 		num = entry
@@ -103,6 +104,7 @@ def flatten_dict_and_simplify(input_dict):
 		poly_num = 0
 		for p in input_dict[entry]['polygons']:
 			poly_num+=1
+			# If a polygon is really large, simplify it
 			if len(p)>50:
 				try:
 					X, Y = simplify_polygon(p)
@@ -116,7 +118,6 @@ def flatten_dict_and_simplify(input_dict):
 				X,Y=zip(*p)
 
 			for i in range(len(X)):
-				# output.append([num, name, prov,poly_num, X, Y, row])
 				# Reduced size:
 				output.append([num,prov, poly_num, X[i], Y[i], row])
 				row+=1
@@ -124,6 +125,7 @@ def flatten_dict_and_simplify(input_dict):
 	return output
 
 def simplify_polygon(polygon):
+	"""simplifies geometry"""
 	from shapely.geometry.polygon import Polygon
 	shape = Polygon(polygon)
 	# @500 10 fold reduction with good detail
@@ -148,34 +150,14 @@ if __name__=='__main__':
 
 	data_dict=table_to_dict(data)
 
-	# test = data_dict['35107']['polygons'][1]
-	print data_dict['35107']['prov']
-	# plot_polygon(test)
-	# xs = [x[0] for x in test]
-	# ys = [x[1] for x in test]
-	# plt.plot(xs, ys) 
-
-	# x,y = simplify_polygon(test)
-
-	# print 'Pre processing length',len(test)
-	# print 'Simplified length',len(x)
-
-	# plt.plot(x,y,color='r')
-	# plt.show()
-
-	# Explicitly encode to STR to avoid issues with French letters
 	final = flatten_dict_and_simplify(data_dict)
-
-
 
 	print 'Writing to file...'
 	outfile= os.path.join(data_dir,'final_simplified.csv')
+
 	with open(outfile,'wb') as f:
 		writer = csv.writer(f)
 		writer.writerows(final)
 
 	print 'Rows written:', len(final)
 	print 'End of script'
-
-	
-
