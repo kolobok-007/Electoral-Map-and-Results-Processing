@@ -10,7 +10,7 @@ Polygon_Generalizer.py:
 Simplifies polygon map shapes to reduce size and improve performance at minimal detail loss
 
 Visualization can be viewed here:
-https://public.tableau.com/views/CanadaFederalElectionResults2015/ResultsperParty?:embed=y&:display_count=yes
+https://public.tableau.com/profile/mikhail.venkov#!/vizhome/CanadaFederalElectionResults2015/ResultsbyDistrict
 
 ##Resources
 Map data from:
